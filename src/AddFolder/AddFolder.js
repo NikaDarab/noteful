@@ -42,33 +42,41 @@ class AddFolder extends Component {
     this.setState({ folderName: newForlderName });
   };
   render() {
-    const error = this.state.error;
-    return (
-      <section className="AddFolder">
-        <h2>Create a folder</h2>
-        <NotefulForm onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label htmlFor="folder-name-input">Name</label>
-            <input
-              type="text"
-              id="folder-name-input"
-              name="folderName"
-              value={this.state.folderName}
-              onChange={(e) => this.updateFolderName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="buttons">
-            <button type="submit" disabled={this.state.folderName.length === 0}>
-              Add folder
-            </button>
-          </div>
-        </NotefulForm>
-      </section>
-    );
+    if (error) {
+      return <h1>Error...</h1>;
+    } else {
+      return (
+        <section className="AddFolder">
+          <h2>Create a folder</h2>
+          <NotefulForm onSubmit={this.handleSubmit}>
+            <div className="field">
+              <label htmlFor="folder-name-input">Name</label>
+              <input
+                type="text"
+                id="folder-name-input"
+                name="folderName"
+                value={this.state.folderName}
+                onChange={(e) => this.updateFolderName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="buttons">
+              <button
+                type="submit"
+                disabled={this.state.folderName.length === 0}
+              >
+                Add folder
+              </button>
+            </div>
+          </NotefulForm>
+        </section>
+      );
+    }
   }
 }
+
 AddFolder.PropTypes = {
   history: PropTypes.object,
 };
+
 export default AddFolder;

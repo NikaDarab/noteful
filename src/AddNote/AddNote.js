@@ -56,63 +56,67 @@ class AddNote extends Component {
       noteContent: newContent,
     });
   };
+
   render() {
     const { folders = [] } = this.context;
-    const error = this.state.error ? <div>{this.state.error}</div> : "";
-    return (
-      <section className="AddNote">
-        {error}
-        <h2>Create a note</h2>
-        <NotefulForm onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label htmlFor="note-name-input">Name</label>
-            <input
-              type="text"
-              id="note-name-input"
-              name="note-name"
-              value={this.state.noteName}
-              onChange={(e) => this.updateNoteName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="note-content-input">Content</label>
-            <textarea
-              id="note-content-input"
-              name="note-content"
-              onChange={(e) => this.updateContent(e.target.value)}
-              required
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="note-folder-select">Folder</label>
-            <select
-              id="note-folder-select"
-              name="note-folder-id"
-              onChange={(e) => this.updateContent(e.target.value)}
-            >
-              <option value={null}>...</option>
-              {folders.map((folder) => (
-                <option key={folder.id} value={folder.id}>
-                  {folder.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="buttons">
-            <button
-              type="submit"
-              disabled={
-                this.state.noteName.length === 0 ||
-                this.state.noteContent.length === 0
-              }
-            >
-              Add note
-            </button>
-          </div>
-        </NotefulForm>
-      </section>
-    );
+    if (error) {
+      return <h1>Error...</h1>;
+    } else {
+      return (
+        <section className="AddNote">
+          {error}
+          <h2>Create a note</h2>
+          <NotefulForm onSubmit={this.handleSubmit}>
+            <div className="field">
+              <label htmlFor="note-name-input">Name</label>
+              <input
+                type="text"
+                id="note-name-input"
+                name="note-name"
+                value={this.state.noteName}
+                onChange={(e) => this.updateNoteName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="note-content-input">Content</label>
+              <textarea
+                id="note-content-input"
+                name="note-content"
+                onChange={(e) => this.updateContent(e.target.value)}
+                required
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="note-folder-select">Folder</label>
+              <select
+                id="note-folder-select"
+                name="note-folder-id"
+                onChange={(e) => this.updateContent(e.target.value)}
+              >
+                <option value={null}>...</option>
+                {folders.map((folder) => (
+                  <option key={folder.id} value={folder.id}>
+                    {folder.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="buttons">
+              <button
+                type="submit"
+                disabled={
+                  this.state.noteName.length === 0 ||
+                  this.state.noteContent.length === 0
+                }
+              >
+                Add note
+              </button>
+            </div>
+          </NotefulForm>
+        </section>
+      );
+    }
   }
 }
 
