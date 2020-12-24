@@ -40,6 +40,9 @@ class AddNote extends Component {
       })
       .catch((error) => {
         console.error({ error });
+        this.setState({
+          error: { error },
+        });
       });
   };
   updateNoteName = (newNoteName) => {
@@ -55,9 +58,10 @@ class AddNote extends Component {
   };
   render() {
     const { folders = [] } = this.context;
-    const errpr = this.state.error ? <div>{this.state.error}</div> : "";
+    const error = this.state.error ? <div>{this.state.error}</div> : "";
     return (
       <section className="AddNote">
+        {error}
         <h2>Create a note</h2>
         <NotefulForm onSubmit={this.handleSubmit}>
           <div className="field">
