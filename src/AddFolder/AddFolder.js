@@ -10,6 +10,7 @@ class AddFolder extends Component {
     super(props);
     this.state = {
       folderName: "",
+      error: null,
     };
   }
   static contextType = ApiContext;
@@ -35,6 +36,9 @@ class AddFolder extends Component {
         this.props.history.push(`/folder/${folder.id}`);
       })
       .catch((error) => {
+        this.setState({
+          error: true,
+        });
         console.error({ error });
       });
   };
