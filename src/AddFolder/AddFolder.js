@@ -46,9 +46,6 @@ class AddFolder extends Component {
     this.setState({ folderName: newForlderName });
   };
   render() {
-    if (error) {
-      return <h1>Error...</h1>;
-    } else {
       return (
         <section className="AddFolder">
           <h2>Create a folder</h2>
