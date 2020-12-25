@@ -59,6 +59,12 @@ class AddNote extends Component {
 
   render() {
     const { folders = [] } = this.context;
+    const error = this.state.error ? (
+      <div className="error">{this.state.error}</div>
+    ) : (
+      ""
+    );
+
     if (error) {
       return <h1>Error...</h1>;
     } else {
