@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import NotefulForm from "../NotefulForm/NotefulForm";
+import React from "react";
+import { Component } from "react";
 import ApiContext from "../ApiContext";
 import PropTypes from "prop-types";
-import config from "../config";
 import "./AddFolder.css";
 
 class AddFolder extends Component {
@@ -10,69 +9,79 @@ class AddFolder extends Component {
     super(props);
     this.state = {
       folderName: "",
-      error: null,
     };
   }
+
   static contextType = ApiContext;
 
-  handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
-    const folder = {
-      name: e.target["folderName"].value,
-    };
-    fetch(`${config.API_ENDPOINT}/folders`, {
+    const { addFolder } = this.context;
+
+    fetch("http://localhost:9090/folders", {
       method: "POST",
+      body: JSON.stringify({ name: this.state.folderName }),
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(folder),
     })
       .then((res) => {
-        if (!res.ok) return res.json().then((e) => Promise.reject(e));
+        if (!res.ok) {
+          throw new Error("Something went wrong, could not add new folder");
+        }
         return res.json();
       })
-      .then((folder) => {
-        this.context.addFolder(folder);
-        this.props.history.push(`/folder/${folder.id}`);
+      .then((data) => {
+        addFolder(data);
+        this.setState({ folderName: "" });
+        this.props.history.goBack();
       })
-      .catch((error) => {
-        this.setState({
-          error: true,
-        });
-        console.error({ error });
+      .catch((err) => {
+        alert(err);
       });
-  };
-  updateFolderName = (newForlderName) => {
-    this.setState({ folderName: newForlderName });
-  };
+  }
+
+  updateFolder(newFolderName) {
+    this.setState({ folderName: newFolderName });
+  }
+
   render() {
+    const error = this.state.error ? (
+      <div className="error">{this.state.error}</div>
+    ) : (
+      ""
+    );
+
     return (
-      <section className="AddFolder">
-        <h2>Create a folder</h2>
-        <NotefulForm onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label htmlFor="folder-name-input">Name</label>
+      <div className="AddFolder">
+        <form className="newFolderForm" onSubmit={(e) => this.handleSubmit(e)}>
+          <fieldset>
+            <legend>Create a New Folder</legend>
+            <label htmlFor="folderName">Enter your folder name here:</label>
+            <br />
             <input
               type="text"
-              id="folder-name-input"
               name="folderName"
+              id="folderName"
               value={this.state.folderName}
-              onChange={(e) => this.updateFolderName(e.target.value)}
-              required
+              onChange={(e) => this.updateFolder(e.target.value)}
             />
-          </div>
-          <div className="buttons">
-            <button type="submit" disabled={this.state.folderName.length === 0}>
-              Add folder
+            <br />
+            <button
+              type="submit"
+              disabled={!(this.state.folderName.length > 0)}
+            >
+              Add New Folder
             </button>
-          </div>
-        </NotefulForm>
-      </section>
+          </fieldset>
+        </form>
+        <button onClick={() => this.props.history.goBack()}>Cancel</button>
+      </div>
     );
   }
 }
 
-AddFolder.PropTypes = {
+AddFolder.propTypes = {
   history: PropTypes.object,
 };
 

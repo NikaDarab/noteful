@@ -5,11 +5,11 @@ import NoteListNav from "../NoteListNav/NoteListNav";
 import NotePageNav from "../NotePageNav/NotePageNav";
 import NoteListMain from "../NoteListMain/NoteListMain";
 import NotePageMain from "../NotePageMain/NotePageMain";
-import AddFolder from "../AddFolder/AddFolder";
-import AddNote from "../AddNote/AddNote";
 import ApiContext from "../ApiContext";
 import config from "../config";
 import "./App.css";
+import AddFolder from "../AddFolder/AddFolder";
+import AddNote from "../AddNote/AddNote";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 class App extends Component {
@@ -38,18 +38,6 @@ class App extends Component {
       });
   }
 
-  handleAddFolder = (folder) => {
-    this.setState({
-      folders: [...this.state.folders, folder],
-    });
-  };
-
-  handleAddNote = (note) => {
-    this.setState({
-      notes: [...this.state.notes, note],
-    });
-  };
-
   handleDeleteNote = (noteId) => {
     this.setState({
       notes: this.state.notes.filter((note) => note.id !== noteId),
@@ -63,8 +51,6 @@ class App extends Component {
           <Route exact key={path} path={path} component={NoteListNav} />
         ))}
         <Route path="/note/:noteId" component={NotePageNav} />
-        <Route path="/add-folder" component={NotePageNav} />
-        <Route path="/add-note" component={NotePageNav} />
       </>
     );
   }
@@ -76,19 +62,29 @@ class App extends Component {
           <Route exact key={path} path={path} component={NoteListMain} />
         ))}
         <Route path="/note/:noteId" component={NotePageMain} />
-        <Route path="/add-folder" component={AddFolder} />
         <Route path="/add-note" component={AddNote} />
+        <Route path="/add-folder" component={AddFolder} />
       </>
     );
   }
+
+  addFolder = (newFolder) => {
+    const addFolder = [...this.state.folders, newFolder];
+    this.setState({ folders: addFolder });
+  };
+
+  addNote = (newNote) => {
+    const addNote = [...this.state.notes, newNote];
+    this.setState({ notes: addNote });
+  };
 
   render() {
     const value = {
       notes: this.state.notes,
       folders: this.state.folders,
-      addFolder: this.handleAddFolder,
-      addNote: this.handleAddNote,
       deleteNote: this.handleDeleteNote,
+      addFolder: this.addFolder,
+      addNote: this.addNote,
     };
     return (
       <ApiContext.Provider value={value}>
